@@ -13,7 +13,7 @@ with open(os.path.join(here, 'README.rst'), 'rU') as f:
     long_description = f.read()
 
 required = [
-    'future'
+    'scapy'
 ]
 
 extras = {
