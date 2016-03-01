@@ -1,6 +1,28 @@
 #!/usr/bin/env python
 
+import argparse
+import scapy.all
+
+from applicationer import VERSION
+
+
+def prepare_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--version', action='version', version='%(prog)s ' + VERSION)
+
+    parser.add_argument('-i', '--interface', help="interface name", required=True)
+
+    return parser
+
+
+def validate_parser(parser):
+    args = parser.parse_args()
+    return args
+
 
 def main():
-    print('hejo widzowie!')
 
+    parser = prepare_parser()
+    args = validate_parser(parser)
+
+    scapy.all.sniff(iface=args.interface, filter="icmp", prn=lambda x: x.show())
