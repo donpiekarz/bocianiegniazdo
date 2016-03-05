@@ -3,11 +3,21 @@
 import argparse
 import scapy.all
 
+from scapy_ssl_tls.ssl_tls import TLS, TLSClientHello, TLSServerHello, TLSCertificate
+
 from applicationer import VERSION
 
 
 def packet_show(packet):
     packet.show()
+
+
+def packet_ssl_filter(packet):
+    #if not packet.haslayer(TLSClientHello) and not packet.haslayer(TLSServerHello):
+    if not packet.haslayer(TLS):
+        return
+
+    packet_show(packet)
 
 
 def prepare_parser():
@@ -29,4 +39,4 @@ def main():
     parser = prepare_parser()
     args = validate_parser(parser)
 
-    scapy.all.sniff(iface=args.interface, filter='icmp', prn=packet_show)
+    scapy.all.sniff(iface=args.interface, filter='tcp', prn=packet_ssl_filter)
